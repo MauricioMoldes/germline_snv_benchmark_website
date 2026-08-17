@@ -151,8 +151,6 @@ function TelemetryPanel({ telemetryData, telemetrySelections }) {
       ) : (
         <p className="text-sm text-gray-400">No telemetry data available yet.</p>
       )}
-      
-
     </div>
   );
 }
