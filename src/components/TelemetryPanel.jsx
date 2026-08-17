@@ -25,14 +25,12 @@ const TELEMETRY_COLORS = {
   CPU_hours: "rgba(217,119,6,0.6)",
   GPU_hours: "rgba(220,38,38,0.6)",
   Wall_time_hours: "rgba(5,150,105,0.6)",
-  Est_cost_usd: "rgba(30,58,138,0.6)",
 };
 
 const TELEMETRY_LABELS = {
   CPU_hours: "CPU hours",
   GPU_hours: "GPU hours",
   Wall_time_hours: "Wall time (hours)",
-  Est_cost_usd: "Estimated cost (USD)",
 };
 
 // Values plotted on a log axis can't be 0 or null (log(0) is undefined,
@@ -119,7 +117,7 @@ function TelemetryPanel({ telemetryData, telemetrySelections }) {
       </p>
       {suggestLog && scaleType === "linear" && (
         <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mb-3 inline-block">
-          Selected metrics span a {Math.round(maxRatio).toLocaleString()}x range ,
+          Selected metrics span a {Math.round(maxRatio).toLocaleString()}x range, 
           try Log scale to see the smaller values.
         </p>
       )}
@@ -156,3 +154,4 @@ function TelemetryPanel({ telemetryData, telemetrySelections }) {
 }
 
 export default TelemetryPanel;
+

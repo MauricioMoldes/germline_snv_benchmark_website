@@ -39,15 +39,11 @@ function FiltersBar({
   const availableSamples = uniqueValues("Sample");
 
   const allMetrics = ["F1", "Recall", "Precision"];
-  const allTelemetry = ["CPU_hours", "GPU_hours", "Wall_time_hours", "Est_cost_usd"];
-  // No real cost data yet -- keep the toggle visible (so it's clear the
-  // feature exists) but inert, rather than removing it outright.
-  const UNAVAILABLE_TELEMETRY = ["Est_cost_usd"];
+  const allTelemetry = ["CPU_hours", "GPU_hours", "Wall_time_hours"];
   const TELEMETRY_LABELS = {
     CPU_hours: "CPU hrs",
     GPU_hours: "GPU hrs",
     Wall_time_hours: "Wall time",
-    Est_cost_usd: "Est. cost ($)",
   };
 
   // Toggle metric selection
@@ -61,7 +57,6 @@ function FiltersBar({
 
   // Toggle telemetry selection
   const toggleTelemetry = (metric) => {
-    if (UNAVAILABLE_TELEMETRY.includes(metric)) return;
     if (telemetrySelections.includes(metric)) {
       onChangeTelemetrySelections(telemetrySelections.filter((m) => m !== metric));
     } else {
@@ -242,27 +237,19 @@ function FiltersBar({
       <div className="flex flex-col mt-4 pt-4 border-t">
         <label className="text-sm font-medium mb-2">Compute & Cost</label>
         <div className="flex gap-2 flex-wrap">
-          {allTelemetry.map((m) => {
-            const unavailable = UNAVAILABLE_TELEMETRY.includes(m);
-            return (
-              <button
-                key={m}
-                onClick={() => toggleTelemetry(m)}
-                disabled={unavailable}
-                title={unavailable ? "No data available yet" : undefined}
-                className={`px-3 py-1 rounded-lg border focus:outline-none focus:ring-2 ${
-                  unavailable
-                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                    : telemetrySelections.includes(m)
-                    ? "bg-amber-500 text-white border-amber-500"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                }`}
-              >
-                {TELEMETRY_LABELS[m]}
-                {unavailable}
-              </button>
-            );
-          })}
+          {allTelemetry.map((m) => (
+            <button
+              key={m}
+              onClick={() => toggleTelemetry(m)}
+              className={`px-3 py-1 rounded-lg border focus:outline-none focus:ring-2 ${
+                telemetrySelections.includes(m)
+                  ? "bg-amber-500 text-white border-amber-500"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {TELEMETRY_LABELS[m]}
+            </button>
+          ))}
         </div>
       </div>
     </div>

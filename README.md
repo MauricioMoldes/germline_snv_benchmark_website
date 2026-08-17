@@ -56,18 +56,17 @@ Input data should be a JSON array of objects like:
   "Threshold": "NA",
   "CPU_hours": null,
   "GPU_hours": null,
-  "Wall_time_hours": null,
-  "Est_cost_usd": null
+  "Wall_time_hours": null
 }
 ```
 
-`summary.json` carries four telemetry fields (`CPU_hours`, `GPU_hours`,
-`Wall_time_hours`, `Est_cost_usd`) but they are intentionally left `null`
+`summary.json` carries three telemetry fields (`CPU_hours`, `GPU_hours`,
+`Wall_time_hours`) but they are intentionally left `null`
 -- see "Compute & Cost" below for why this data lives elsewhere instead.
 
 ## Compute & Cost (pipeline telemetry)
 
-Computational telemetry -- CPU/GPU hours, wall time, estimated run cost --
+Computational telemetry -- CPU/GPU hours, wall time --
 is reported **per pipeline execution across all samples**, not per
 sample/caller/File. That's a different granularity than every other field
 in `summary.json` (which is one row per SNP/INDEL x ALL/PASS x Region x
@@ -85,7 +84,6 @@ it lives in its own file: `public/telemetry.json`.
   "Wall_time_hours": 3.5961,
   "CPU_hours": 1521.9,
   "GPU_hours": 0.0,
-  "Est_cost_usd": null,
   "Note": null
 }
 ```
@@ -97,15 +95,16 @@ row per pipeline execution, durations as `XhYYmZZs` strings) via:
 python3 table4_to_telemetry_json.py -i telemetry_table4.csv -o public/telemetry.json
 ```
 
-`Est_cost_usd` is currently `null` for every entry -- cost data isn't
-available yet. `-` in the source table means a known zero (e.g. no GPU
+`-` in the source table means a known zero (e.g. no GPU
 used); `NA` means not measured/not applicable and becomes `null`, unless
 a footnote in the paper gives an explicit substitute value (as for the
-PB1/PB2 CPU allocation).
+PB1/PB2 CPU allocation). There is no cost estimate -- run cost data isn't
+available, so it was dropped from the schema entirely rather than kept
+as an always-null placeholder.
 
 In the app, the **Compute & Cost** toggles in the Filters bar are always
 active, independent of every other filter. Turning one on switches the
-main panel to a chart + table of `telemetry.json`, and locks the other
+main panel to a chart of `telemetry.json`, and locks the other
 filters (Caller, Pipeline, Sample, Truthset, Region, Type, Filter, Metrics,
 Plot Type, Facet By) to `ALL`, since those don't apply to per-execution
 totals. Turning all Compute & Cost toggles back off restores normal
